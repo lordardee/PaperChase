@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -51,6 +52,10 @@ public class PlayActivity extends AppCompatActivity {
 
     public void startCourse(int position){
         //Starta en ny activity som har QR scanner.
+        if (pos != null){
+            Intent intent = new Intent(PlayActivity.this, GameActivity.class);
+            startActivity(intent);
+        }
     }
 
     public void removeCourse(int position){ //Crashar om man försöker ta bort utan att välja.
