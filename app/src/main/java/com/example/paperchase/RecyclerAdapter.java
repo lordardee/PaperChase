@@ -3,6 +3,7 @@ package com.example.paperchase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,10 +25,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
 
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
         public TextView recyclerTextView;
+        public ImageView mImageView;
 
         public RecyclerViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
             recyclerTextView = itemView.findViewById(R.id.textView);
+            mImageView = itemView.findViewById(R.id.imageView);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -58,6 +61,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
         RecyclerItem currentItem = mRecyclerList.get(position);
+        holder.mImageView.setImageResource(currentItem.getImageResource());
         holder.recyclerTextView.setText(currentItem.getItem());
     }
 

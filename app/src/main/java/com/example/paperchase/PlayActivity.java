@@ -53,7 +53,7 @@ public class PlayActivity extends AppCompatActivity {
     public void startCourse(int position){
         //Starta en ny activity som har QR scanner.
         if (pos != null){
-            Intent intent = new Intent(PlayActivity.this, GameActivity.class);
+            Intent intent = new Intent(PlayActivity.this, PlayCourseActivity.class);
             startActivity(intent);
         }
     }
@@ -71,9 +71,9 @@ public class PlayActivity extends AppCompatActivity {
 
     public void createRecyclerList(){
         mRecyclerList = new ArrayList<>();
-        mRecyclerList.add(new RecyclerItem("Place holder for saved courses"));  //Ska skicka med namnet på skapade courses.
-        mRecyclerList.add(new RecyclerItem("Place holder for saved courses"));
-        mRecyclerList.add(new RecyclerItem("Place holder for saved courses"));
+        mRecyclerList.add(new RecyclerItem(0,"Place holder for saved courses"));  //Ska skicka med namnet på skapade courses.
+        mRecyclerList.add(new RecyclerItem(0,"Place holder for saved courses"));
+        mRecyclerList.add(new RecyclerItem(0,"Place holder for saved courses"));
     }
 
     public void buildRecyclerView(){
