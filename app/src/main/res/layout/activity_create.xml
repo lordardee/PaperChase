@@ -43,10 +43,10 @@
         tools:srcCompat="@color/cardview_dark_background" />
 
     <Button
-        android:id="@+id/saveQR"
+        android:id="@+id/addQR"
         android:layout_width="356dp"
         android:layout_height="50dp"
-        android:text="SAVE QR"
+        android:text="ADD QR"
         app:backgroundTint="@color/cardview_dark_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -56,13 +56,13 @@
         app:layout_constraintVertical_bias="0.358" />
 
     <Button
-        android:id="@+id/checkCourse"
+        android:id="@+id/saveCourse"
         android:layout_width="356dp"
         android:layout_height="50dp"
-        android:text="CHECK COURSE"
+        android:text="SAVE COURSE"
         app:backgroundTint="@color/cardview_dark_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/saveQR" />
+        app:layout_constraintTop_toBottomOf="@+id/addQR" />
 </androidx.constraintlayout.widget.ConstraintLayout>

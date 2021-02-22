@@ -11,6 +11,9 @@ import android.widget.Button;
 
 import java.util.ArrayList;
 
+import androidmads.library.qrgenearator.QRGContents;
+import androidmads.library.qrgenearator.QRGEncoder;
+
 public class PlayActivity extends AppCompatActivity {
     private ArrayList<RecyclerItem> mRecyclerList;
     private Integer pos;

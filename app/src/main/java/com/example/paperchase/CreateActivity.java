@@ -8,21 +8,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import java.util.Queue;
-import java.util.LinkedList;
 
-import com.google.zxing.WriterException;
-
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
 
 public class CreateActivity extends AppCompatActivity {
     EditText qrvalue;
-    Button generateQR,saveQR,checkCourse;
+    Button generateQR, addQR, saveCourse;
     ImageView qrCodeImage;
-    Queue<String> savedQR = new LinkedList<String>();
+    ArrayList<String> savedQR = new ArrayList<>();
+    ArrayList<ArrayList<String>> courses = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +28,8 @@ public class CreateActivity extends AppCompatActivity {
 
         qrvalue = findViewById(R.id.qrInput);
         generateQR = findViewById(R.id.generateQR);
-        saveQR = findViewById(R.id.saveQR);
-        checkCourse = findViewById(R.id.checkCourse);
+        addQR = findViewById(R.id.addQR);
+        saveCourse = findViewById(R.id.saveCourse);
         qrCodeImage = findViewById(R.id.qrPlaceHolder);
 
         generateQR.setOnClickListener(new View.OnClickListener() {
@@ -49,15 +46,25 @@ public class CreateActivity extends AppCompatActivity {
             }
         });
 
-        saveQR.setOnClickListener(new View.OnClickListener() {
+        addQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String data = qrvalue.getText().toString();
                 if (data.isEmpty()) {
                     qrvalue.setError("Value is required");
                 } else {
+                    QRGEncoder qrgEncoder = new QRGEncoder(data, null, QRGContents.Type.TEXT, 500);
+                    Bitmap qrBits = qrgEncoder.getBitmap();
                     savedQR.add(data);
                 }
+            }
+        });
+
+        saveCourse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                courses.add(savedQR);
+                savedQR.clear();
             }
         });
     }
