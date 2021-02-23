@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.content.Intent;
 
 import java.util.ArrayList;
 
@@ -19,7 +20,6 @@ public class CreateActivity extends AppCompatActivity {
     Button generateQR, addQR, saveCourse;
     ImageView qrCodeImage;
     ArrayList<String> savedQR = new ArrayList<>();
-    ArrayList<ArrayList<String>> courses = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +63,9 @@ public class CreateActivity extends AppCompatActivity {
         saveCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                courses.add(savedQR);
-                savedQR.clear();
+                Intent intent = new Intent(CreateActivity.this, PlayActivity.class);
+                intent.putExtra("newCourse", savedQR);
+                startActivity(intent);
             }
         });
     }

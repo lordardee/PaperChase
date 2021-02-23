@@ -8,15 +8,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.ArrayList;
-
-import androidmads.library.qrgenearator.QRGContents;
-import androidmads.library.qrgenearator.QRGEncoder;
 
 public class PlayActivity extends AppCompatActivity {
     private ArrayList<RecyclerItem> mRecyclerList;
     private Integer pos;
+    private ArrayList<ArrayList<String>> courseList = new ArrayList<>();
+    private ArrayList<String> tempCourse = new ArrayList<>();
 
     private RecyclerView mRecyclerView;
     private RecyclerAdapter mAdapter;
@@ -24,6 +24,9 @@ public class PlayActivity extends AppCompatActivity {
 
     private Button buttonStart;
     private Button buttonRemove;
+    private Button buttonCreate;
+
+    TextView testView; //Test
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,28 @@ public class PlayActivity extends AppCompatActivity {
 
         buttonStart = findViewById(R.id.startBtn);
         buttonRemove = findViewById(R.id.removeBtn);
+        buttonCreate = findViewById(R.id.createBtn);
+
+        testView = findViewById(R.id.testView); //Test
+
+        try {
+            tempCourse = (ArrayList<String>) getIntent().getSerializableExtra("newCourse");
+            if (!(tempCourse.isEmpty())){
+                courseList.add(tempCourse);
+                testView.setText(String.valueOf(tempCourse));//Test
+                tempCourse.clear();
+            }
+        } catch (Exception e){
+            System.out.println("Why you crash?");
+        }
+
+        buttonCreate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PlayActivity.this, CreateActivity.class);
+                startActivity(intent);
+            }
+        });
 
         buttonStart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,9 +99,11 @@ public class PlayActivity extends AppCompatActivity {
 
     public void createRecyclerList(){
         mRecyclerList = new ArrayList<>();
-        mRecyclerList.add(new RecyclerItem(0,"Place holder for saved courses"));  //Ska skicka med namnet på skapade courses.
-        mRecyclerList.add(new RecyclerItem(0,"Place holder for saved courses"));
-        mRecyclerList.add(new RecyclerItem(0,"Place holder for saved courses"));
+        //int i = 0;
+        //mRecyclerList.add(new RecyclerItem(0,"Course " + i));  //Ska skicka med namnet på skapade courses.
+        for (int i = 0; i < courseList.size(); i++){
+            mRecyclerList.add(new RecyclerItem(0,"Course " + i));  //Ska skicka med namnet på skapade courses.
+        }
     }
 
     public void buildRecyclerView(){
