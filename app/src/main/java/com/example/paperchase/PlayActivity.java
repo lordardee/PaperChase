@@ -5,42 +5,48 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class PlayActivity extends AppCompatActivity {
     private ArrayList<RecyclerItem> mRecyclerList;
     private Integer pos;
-    private ArrayList<ArrayList<String>> courseList = new ArrayList<>();
-    private ArrayList<String> tempCourse = new ArrayList<>();
+    //private ArrayList<ArrayList<String>> courseList = new ArrayList<>();
+    //private ArrayList<String> tempCourse = new ArrayList<>();
 
     private RecyclerView mRecyclerView;
     private RecyclerAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    private Button buttonStart;
-    private Button buttonRemove;
-    private Button buttonCreate;
+    private Button buttonStart, buttonRemove, buttonCreate;
 
-    TextView testView; //Test
+    DatabaseHelper mDatabaseHelper;
+    private static final String TAG = "PopulateRecycler";
+
+    //TextView testView; //Test
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
+        mDatabaseHelper = new DatabaseHelper(this);
 
         createRecyclerList();
         buildRecyclerView();
 
+
         buttonStart = findViewById(R.id.startBtn);
         buttonRemove = findViewById(R.id.removeBtn);
-        buttonCreate = findViewById(R.id.createBtn);
+        buttonCreate = findViewById(R.id.createButton);
 
-        testView = findViewById(R.id.testView); //Test
+        /*testView = findViewById(R.id.testView); //Test
 
         try {
             tempCourse = (ArrayList<String>) getIntent().getSerializableExtra("newCourse");
@@ -51,7 +57,7 @@ public class PlayActivity extends AppCompatActivity {
             }
         } catch (Exception e){
             System.out.println("Why you crash?");
-        }
+        }*/
 
         buttonCreate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,12 +104,18 @@ public class PlayActivity extends AppCompatActivity {
     }
 
     public void createRecyclerList(){
+        Log.d(TAG, "populateRecyclerView: Displaying courses in the RecyclerView");
+
+        Cursor data = mDatabaseHelper.getData();
         mRecyclerList = new ArrayList<>();
-        //int i = 0;
-        //mRecyclerList.add(new RecyclerItem(0,"Course " + i));  //Ska skicka med namnet på skapade courses.
-        for (int i = 0; i < courseList.size(); i++){
-            mRecyclerList.add(new RecyclerItem(0,"Course " + i));  //Ska skicka med namnet på skapade courses.
+
+        while(data.moveToNext()){
+            mRecyclerList.add(new RecyclerItem(0, data.getString(1)));
         }
+
+        /*for (int i = 0; i < courseList.size(); i++){
+            mRecyclerList.add(new RecyclerItem(0,"Course " + i));  //Ska skicka med namnet på skapade courses.
+        }*/
     }
 
     public void buildRecyclerView(){

@@ -57,12 +57,26 @@
 
     <Button
         android:id="@+id/saveCourse"
-        android:layout_width="356dp"
+        android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:text="SAVE COURSE"
         app:backgroundTint="@color/cardview_dark_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.901"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addQR"
+        app:layout_constraintVertical_bias="0.391" />
+
+    <EditText
+        android:id="@+id/courseName"
+        android:layout_width="194dp"
+        android:layout_height="50dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/saveCourse"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addQR" />
 </androidx.constraintlayout.widget.ConstraintLayout>

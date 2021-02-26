@@ -48,4 +48,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/playBtn"
         app:layout_constraintVertical_bias="0.652" />
+
+    <Button
+        android:id="@+id/createBtn"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:text="CREATE"
+        app:backgroundTint="@color/cardview_dark_background"
+        app:layout_constraintBottom_toTopOf="@+id/settingsBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playBtn" />
 </androidx.constraintlayout.widget.ConstraintLayout>
