@@ -69,15 +69,12 @@ public class CreateActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String name = courseName.getText().toString();
-                if (name.length() != 0){
+                if (name.length() != 0){ //Kolla också så att savedQR inte är tom
                     AddData(name);
                     courseName.setText("");
                 } else {
                     courseName.setError("Name your course");
                 }
-
-                //Intent intent = new Intent(CreateActivity.this, PlayActivity.class);
-                //startActivity(intent);
             }
         });
     }
