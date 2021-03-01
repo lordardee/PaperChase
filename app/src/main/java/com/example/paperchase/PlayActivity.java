@@ -63,8 +63,12 @@ public class PlayActivity extends AppCompatActivity {
         buttonRemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int position = pos;
-                removeCourse(position);
+                if (pos != null){
+                    int position = pos;
+                    removeCourse(position);
+                } else {
+                    toastMessage("Choose a course before removing");
+                }
             }
         });
     }
@@ -77,17 +81,21 @@ public class PlayActivity extends AppCompatActivity {
         }
     }
 
-    public void removeCourse(int position){ //Crashar om man försöker ta bort utan att välja. Crashar om man försöker ta bort från databasen.
-        mRecyclerList.remove(position);
-        mAdapter.notifyItemRemoved(position);
-        String name = mRecyclerList.get(position).getItem();
-        mDatabaseHelper.deleteData(position, name);
-        toastMessage("Removed from database");
-        pos = null;
+    public void removeCourse(int position){ //Den tar inte bort från databasen av någon anledning.
+        if (pos != null){
+            String name = mRecyclerList.get(position).getItem();
+            mDatabaseHelper.deleteData(position, name);
+            toastMessage("Removed from database");
+            mRecyclerList.remove(position);
+            mAdapter.notifyItemRemoved(position);
+            pos = null;
+        } else {
+            toastMessage("Choose a course before removing");
+        }
     }
 
-    public void changeItem(int position, String text){
-        mRecyclerList.get(position).changeText(text);
+    public void changeItem(int position, int image){
+        mRecyclerList.get(position).changeImage(image);
         mAdapter.notifyItemChanged(position);
     }
 
@@ -114,11 +122,10 @@ public class PlayActivity extends AppCompatActivity {
         mAdapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                RecyclerItem temp = mRecyclerList.get(position);
                 if (pos != null){
-                    changeItem(pos, temp.getItem()); //Något fel med pos tar nästa pos och inte gamla
+                    changeItem(pos, 0);
                 }
-                changeItem(position, "Selected"); //istället för att ändra text så ändra bild.
+                changeItem(position, R.drawable.ic_baseline_arrow_right);
                 pos = position;
             }
         });
