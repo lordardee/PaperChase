@@ -8,8 +8,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.content.Intent;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -20,8 +21,9 @@ public class CreateActivity extends AppCompatActivity {
     EditText qrvalue, courseName;
     Button generateQR, addQR, saveCourse;
     ImageView qrCodeImage;
-    ArrayList<String> savedQR = new ArrayList<>();
+    ArrayList<String> qrList = new ArrayList<>();
     DatabaseHelper mDatabaseHelper;
+    Gson gson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,7 @@ public class CreateActivity extends AppCompatActivity {
         saveCourse = findViewById(R.id.saveCourse);
         qrCodeImage = findViewById(R.id.qrPlaceHolder);
         mDatabaseHelper = new DatabaseHelper(this);
+        gson = new Gson();
 
         generateQR.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,7 +49,6 @@ public class CreateActivity extends AppCompatActivity {
                     QRGEncoder qrgEncoder = new QRGEncoder(data, null, QRGContents.Type.TEXT, 500);
                     Bitmap qrBits = qrgEncoder.getBitmap();
                     qrCodeImage.setImageBitmap(qrBits);
-                    qrvalue.setText("");
                 }
             }
         });
@@ -60,7 +62,8 @@ public class CreateActivity extends AppCompatActivity {
                 } else {
                     QRGEncoder qrgEncoder = new QRGEncoder(data, null, QRGContents.Type.TEXT, 500); //Test för att spara qr image
                     Bitmap qrBits = qrgEncoder.getBitmap(); //Test för att spara qr image
-                    savedQR.add(data);
+                    qrList.add(data);
+                    qrvalue.setText("");
                 }
             }
         });
@@ -69,14 +72,28 @@ public class CreateActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String name = courseName.getText().toString();
-                if (name.length() != 0){ //Kolla också så att savedQR inte är tom
+                if (name.length() != 0 && qrList.isEmpty() == false){
+                    String dataString = gson.toJson(qrList);
+                    AddQrData(dataString);
                     AddData(name);
                     courseName.setText("");
+                } else if (qrList.isEmpty()){
+                    toastMessage("You need to save a QR-code first");
                 } else {
                     courseName.setError("Name your course");
                 }
             }
         });
+    }
+
+    public void AddQrData(String newQrValues){
+        boolean debug = mDatabaseHelper.addQrData(newQrValues);
+
+        if (debug){
+            toastMessage("");
+        } else {
+            toastMessage("Something went wrong from addQr");
+        }
     }
 
     public void AddData(String newItem){

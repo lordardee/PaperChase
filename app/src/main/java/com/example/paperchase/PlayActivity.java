@@ -18,7 +18,6 @@ import java.util.ArrayList;
 public class PlayActivity extends AppCompatActivity {
     private ArrayList<RecyclerItem> mRecyclerList;
     private Integer pos;
-    private ArrayList<String> tempCourse = new ArrayList<>();
 
     private RecyclerView mRecyclerView;
     private RecyclerAdapter mAdapter;
@@ -26,7 +25,7 @@ public class PlayActivity extends AppCompatActivity {
 
     private Button buttonStart, buttonRemove, buttonCreate;
 
-    DatabaseHelper mDatabaseHelper;
+    DatabaseHelper mDatabaseHelper = new DatabaseHelper(this);
     private static final String TAG = "PopulateRecycler";
 
     @Override
@@ -34,7 +33,6 @@ public class PlayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
         pos = null;
-        mDatabaseHelper = new DatabaseHelper(this);
 
         createRecyclerList();
         buildRecyclerView();
@@ -55,8 +53,12 @@ public class PlayActivity extends AppCompatActivity {
         buttonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int position = pos;
-                startCourse(position);
+                if (pos != null){
+                    int position = pos;
+                    startCourse(position);
+                } else {
+                    toastMessage("Choose a course before starting");
+                }
             }
         });
 
@@ -77,6 +79,8 @@ public class PlayActivity extends AppCompatActivity {
         //Starta en ny activity som har QR scanner.
         if (pos != null){
             Intent intent = new Intent(PlayActivity.this, PlayCourseActivity.class);
+            String extra = mRecyclerList.get(position).getItem();
+            intent.putExtra("COURSE_NAME", extra);
             startActivity(intent);
         }
     }
