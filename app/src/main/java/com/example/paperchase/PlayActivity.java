@@ -25,13 +25,14 @@ public class PlayActivity extends AppCompatActivity {
 
     private Button buttonStart, buttonRemove, buttonCreate;
 
-    DatabaseHelper mDatabaseHelper = new DatabaseHelper(this);
+    DatabaseHelper mDatabaseHelper;
     private static final String TAG = "PopulateRecycler";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
+        mDatabaseHelper = new DatabaseHelper(this);
         pos = null;
 
         createRecyclerList();
@@ -110,7 +111,7 @@ public class PlayActivity extends AppCompatActivity {
         mRecyclerList = new ArrayList<>();
 
         while(data.moveToNext()){
-            mRecyclerList.add(new RecyclerItem(0, data.getString(1)));
+            mRecyclerList.add(new RecyclerItem(0, data.getString(0)));
         }
     }
 

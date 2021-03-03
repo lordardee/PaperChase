@@ -22,7 +22,8 @@ public class PlayCourseActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private ArrayList<RecyclerItem> qrList;
+    private ArrayList<String> qrList;
+    private ArrayList<RecyclerItem> mRecyclerList;
     private String courseName = "";
 
     Gson gson;
@@ -34,6 +35,7 @@ public class PlayCourseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_course);
+        mDatabaseHelper = new DatabaseHelper(this);
         //Intent intent = getIntent();
         Bundle extras = getIntent().getExtras();
         courseName = extras.getString("COURSE_NAME");
@@ -57,20 +59,25 @@ public class PlayCourseActivity extends AppCompatActivity {
         gson = new Gson();
 
         String dbData = "";
-        Cursor data = mDatabaseHelper.getQrValues("Test"/*courseName*/);
+        Cursor data = mDatabaseHelper.getQrValues(courseName);
         if (data.moveToFirst()){
-            dbData = data.getString(data.getColumnIndex("QR_VALUES"));
+            dbData = data.getString(data.getColumnIndex("qr_values"));
         }
         Type type = new TypeToken<ArrayList<String>>(){}.getType();
         qrList = new ArrayList<>();
         qrList = gson.fromJson(dbData, type);
+
+        mRecyclerList = new ArrayList<>();
+        for (int i = 0; i < qrList.size(); i++){
+            mRecyclerList.add(new RecyclerItem(0, qrList.get(i))); //måste göra så att man inte kan se qr värdena.
+        }
     }
 
     public void buildRecyclerView(){
         mRecyclerView = findViewById(R.id.qrRecycler);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
-        mAdapter = new RecyclerAdapter(qrList);
+        mAdapter = new RecyclerAdapter(mRecyclerList);
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);

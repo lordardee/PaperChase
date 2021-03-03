@@ -13,7 +13,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String TAG = "DatabaseHelper";
 
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 7;
 
     private static final String TABLE_NAME = "course_table";
     private static final String COURSE_ID = "ID";
@@ -36,20 +36,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean addQrData(String qrData){
+    public void addQrData(String qrData, String name){
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(QR_VALUES, qrData);
-
-        Log.d(TAG, "addQrData: Adding " + qrData + " to " + TABLE_NAME);
-
-        long result = db.insert(TABLE_NAME, null, contentValues);
-
-        if (result == -1) {
-            return false;
-        } else {
-            return true;
-        }
+        String query = "UPDATE " + TABLE_NAME + " SET " + QR_VALUES + "= '" + qrData + "' WHERE " + COURSE_NAME + " = '" + name + "'";
+        db.execSQL(query);
     }
 
     public boolean addData(String item) {
@@ -68,12 +58,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public Cursor getData(){ //Kommer nog behöva reload från förra commit.
+    public Cursor getData(){
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "SELECT * FROM " + TABLE_NAME; //Måste vara * annars nullptrexception.
+        String query = "SELECT " + COURSE_NAME + " FROM " + TABLE_NAME;
         Cursor data = db.rawQuery(query, null);
-        /*Cursor data = null; //Den kan inte va null fattar inte hur jag ska göra för jag vill inte displaya qr värdena får nog lagra namnen i en separat array.
-        data.getString(data.getColumnIndex( "COURSE_NAME" ));*/
         return data;
     }
 
@@ -93,6 +81,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void deleteData(int id, String name){
         SQLiteDatabase db = this.getWritableDatabase();
+        //id = 4; //Debug funkar inte att ta bort om jag inte har denna hård kodning.
         String query = "DELETE FROM " + TABLE_NAME + " WHERE ID = '" + id + "'";
         db.execSQL(query);
     }

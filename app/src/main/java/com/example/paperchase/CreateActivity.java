@@ -72,10 +72,10 @@ public class CreateActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String name = courseName.getText().toString();
-                if (name.length() != 0 && qrList.isEmpty() == false){
+                if (name.length() != 0 && !qrList.isEmpty()){
                     String dataString = gson.toJson(qrList);
-                    AddQrData(dataString);
                     AddData(name);
+                    mDatabaseHelper.addQrData(dataString, name);
                     courseName.setText("");
                 } else if (qrList.isEmpty()){
                     toastMessage("You need to save a QR-code first");
@@ -84,16 +84,6 @@ public class CreateActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    public void AddQrData(String newQrValues){
-        boolean debug = mDatabaseHelper.addQrData(newQrValues);
-
-        if (debug){
-            toastMessage("");
-        } else {
-            toastMessage("Something went wrong from addQr");
-        }
     }
 
     public void AddData(String newItem){
