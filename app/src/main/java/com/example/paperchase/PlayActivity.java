@@ -38,7 +38,6 @@ public class PlayActivity extends AppCompatActivity {
         createRecyclerList();
         buildRecyclerView();
 
-
         buttonStart = findViewById(R.id.startBtn);
         buttonRemove = findViewById(R.id.removeBtn);
         buttonCreate = findViewById(R.id.createButton);

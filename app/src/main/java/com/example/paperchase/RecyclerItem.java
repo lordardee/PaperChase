@@ -16,4 +16,6 @@ public class RecyclerItem {
     public int getImageResource(){ return mImageResource; }
 
     public void changeImage(int image){ mImageResource = image; }
+
+    public void changeText(String text){itemName = text; }
 }

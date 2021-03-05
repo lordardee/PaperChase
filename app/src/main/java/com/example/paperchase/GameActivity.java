@@ -4,8 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,14 +25,18 @@ import com.karumi.dexter.listener.single.PermissionListener;
 public class GameActivity extends AppCompatActivity {
     CodeScanner codeScanner;
     CodeScannerView scannerView;
-    TextView resultData;
+    private TextView resultData;
+    private ImageButton backButton;
+    private String tempName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        tempName = GameActivity.this.getIntent().getStringExtra("TEMP");
 
         resultData = findViewById(R.id.qrResult);
+        backButton = findViewById(R.id.backBtn);
         scannerView = findViewById(R.id.scannerView);
         codeScanner = new CodeScanner(this, scannerView);
 
@@ -50,6 +56,17 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 codeScanner.startPreview();
+            }
+        });
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String data = "1"/*resultData.getText().toString()*/;
+                Intent intent = new Intent(GameActivity.this, PlayCourseActivity.class);
+                intent.putExtra("QR_RESULT", data);
+                intent.putExtra("TEMP", tempName);
+                startActivity(intent);
             }
         });
     }
