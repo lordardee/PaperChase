@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.View;
+import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,18 +24,22 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 
+import java.util.ArrayList;
+
 public class GameActivity extends AppCompatActivity {
     CodeScanner codeScanner;
     CodeScannerView scannerView;
     private TextView resultData;
     private ImageButton backButton;
     private String tempName;
+    private ArrayList<String> qrTempList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         tempName = GameActivity.this.getIntent().getStringExtra("TEMP");
+        qrTempList = GameActivity.this.getIntent().getStringArrayListExtra("QR_RESULT");
 
         resultData = findViewById(R.id.qrResult);
         backButton = findViewById(R.id.backBtn);
@@ -62,9 +68,10 @@ public class GameActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String data = "1"/*resultData.getText().toString()*/;
+                String data = /*resultData.getText().toString()*/"1";
+                qrTempList.add(data);
                 Intent intent = new Intent(GameActivity.this, PlayCourseActivity.class);
-                intent.putExtra("QR_RESULT", data);
+                intent.putExtra("QR_RESULT", qrTempList);
                 intent.putExtra("TEMP", tempName);
                 startActivity(intent);
             }

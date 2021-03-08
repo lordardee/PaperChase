@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="16dp"
-        android:text="TextView"
+        android:text=""
         android:textAlignment="center"
         android:textColor="#FFEE58"
         android:textSize="16sp"
