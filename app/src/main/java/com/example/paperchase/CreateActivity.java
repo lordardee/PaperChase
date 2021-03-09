@@ -60,8 +60,6 @@ public class CreateActivity extends AppCompatActivity {
                 if (data.isEmpty()) {
                     qrvalue.setError("Value is required");
                 } else {
-                    QRGEncoder qrgEncoder = new QRGEncoder(data, null, QRGContents.Type.TEXT, 500); //Test för att spara qr image
-                    Bitmap qrBits = qrgEncoder.getBitmap(); //Test för att spara qr image
                     qrList.add(data);
                     qrvalue.setText("");
                 }
@@ -76,6 +74,7 @@ public class CreateActivity extends AppCompatActivity {
                     String dataString = gson.toJson(qrList);
                     AddData(name);
                     mDatabaseHelper.addQrData(dataString, name);
+                    mDatabaseHelper.createHighscoreTable(name);
                     courseName.setText("");
                 } else if (qrList.isEmpty()){
                     toastMessage("You need to save a QR-code first");

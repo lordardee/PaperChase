@@ -11,9 +11,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PaperChase">
-        <activity android:name=".PlayCourseActivity"></activity>
+        <activity android:name=".CourseHighScore"></activity>
+        <activity android:name=".PlayCourseActivity" />
         <activity android:name=".GameActivity" />
-        <activity android:name=".SettingsActivity" />
+        <activity android:name=".HighScoreActivity" />
         <activity android:name=".CreateActivity" />
         <activity android:name=".PlayActivity" />
         <activity android:name=".SplashActivity">

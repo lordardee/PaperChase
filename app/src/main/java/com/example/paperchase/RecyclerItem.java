@@ -2,7 +2,7 @@ package com.example.paperchase;
 
 public class RecyclerItem {
     private String itemName;
-    private int mImageResource; //Kanske ska vara Bitmap istället för int?
+    private int mImageResource;
 
     public RecyclerItem(int imageResource, String item){
         itemName = item;

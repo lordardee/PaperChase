@@ -4,21 +4,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.database.Cursor;
-import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -48,6 +46,7 @@ public class PlayCourseActivity extends AppCompatActivity {
     DatabaseHelper mDatabaseHelper;
     private static final String TAG = "PopulateRecycler";
 
+    @SuppressLint("SimpleDateFormat")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,6 +100,10 @@ public class PlayCourseActivity extends AppCompatActivity {
                 timer.stop();
                 currentTime = format.format(new Date());
                 sessionManager.setFlag(false);
+                if (timer.getText() != "00:00" && flag){
+                    Intent intent = new Intent(PlayCourseActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -119,6 +122,7 @@ public class PlayCourseActivity extends AppCompatActivity {
         });
 
         checkBtn.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("DefaultLocale")
             @Override
             public void onClick(View v) {
                 for (int i = 0; i < qrList.size(); i++){
@@ -137,10 +141,14 @@ public class PlayCourseActivity extends AppCompatActivity {
                                 try {
                                     Date date1 = format.parse(sessionCurrentTime);
                                     Date date2 = format.parse(currentTime);
-                                    int elapsed = (int)(date2.getTime() - date1.getTime());
+                                    long elapsed = (long) (date2.getTime() - date1.getTime());
                                     sessionManager.setFlag(false);
                                     timer.stop();
-                                    finalTime = String.valueOf(elapsed);
+                                    int seconds = (int) (elapsed / 1000) % 60 ;
+                                    int minutes = (int) ((elapsed / (1000*60)) % 60);
+                                    int hours   = (int) ((elapsed / (1000*60*60)) % 24);
+                                    finalTime = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+                                    mDatabaseHelper.addHighScoreData(finalTime, courseName);
                                 } catch (ParseException e){
                                     e.printStackTrace();
                                 }

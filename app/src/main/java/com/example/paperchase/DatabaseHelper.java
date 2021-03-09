@@ -7,18 +7,17 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import java.util.ArrayList;
-
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String TAG = "DatabaseHelper";
 
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 13;
 
     private static final String TABLE_NAME = "course_table";
     private static final String COURSE_ID = "ID";
     private static final String COURSE_NAME = "course_name";
     private static final String QR_VALUES = "qr_values";
+    private static final String HIGHSCORE = "highscore_entries";
 
     public DatabaseHelper(Context context) {
         super(context, TABLE_NAME, null, DATABASE_VERSION);
@@ -40,6 +39,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "UPDATE " + TABLE_NAME + " SET " + QR_VALUES + "= '" + qrData + "' WHERE " + COURSE_NAME + " = '" + name + "'";
         db.execSQL(query);
+    }
+
+    public void addHighScoreData(String scoreData, String name){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(HIGHSCORE, scoreData);
+
+        Log.d(TAG, "addHighScore: Adding " + scoreData + " to " + name);
+
+        db.insert(name, null, contentValues);
+    }
+
+    public void createHighscoreTable(String name){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS " + name);
+        String createTable = "CREATE TABLE " + name + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " + HIGHSCORE + " TEXT)";
+        db.execSQL(createTable);
     }
 
     public boolean addData(String item) {
@@ -68,7 +84,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return data;
     }
 
-    public Cursor getItemId(String name){ //Behöver nog inte denna. kanske till delete.
+    public Cursor getHighScore(String name){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT " + HIGHSCORE + " FROM " + name + " ORDER BY " + HIGHSCORE + " ASC";
+        Cursor data = db.rawQuery(query, null);
+        return data;
+    }
+
+    public Cursor getItemId(String name){
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT " + COURSE_ID + " FROM " + TABLE_NAME + " WHERE " + COURSE_NAME + " = '" + name + "'";
         Cursor data = db.rawQuery(query, null);
@@ -77,7 +100,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void deleteData(String name){
         SQLiteDatabase db = this.getWritableDatabase();
-        //id = 4; //Debug funkar inte att ta bort om jag inte har denna hård kodning.
         Cursor data = getItemId(name);
         long id = 0;
         while(data.moveToNext()){
@@ -86,5 +108,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String query = "DELETE FROM " + TABLE_NAME + " WHERE ID = '" + id + "'";
         db.execSQL(query);
         data.close();
+    }
+
+    public void deleteHighscore(String name){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DROP TABLE " + name);
     }
 }

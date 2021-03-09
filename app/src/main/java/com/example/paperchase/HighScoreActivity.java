@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class PlayActivity extends AppCompatActivity {
+public class HighScoreActivity extends AppCompatActivity {
     private ArrayList<RecyclerItem> mRecyclerList;
     private Integer pos;
 
@@ -22,7 +22,7 @@ public class PlayActivity extends AppCompatActivity {
     private RecyclerAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    private Button buttonStart, buttonRemove, buttonCreate;
+    private Button viewHighscore;
 
     DatabaseHelper mDatabaseHelper;
     private static final String TAG = "PopulateRecycler";
@@ -30,71 +30,28 @@ public class PlayActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_play);
+        setContentView(R.layout.activity_highscore);
         mDatabaseHelper = new DatabaseHelper(this);
         pos = null;
 
         createRecyclerList();
         buildRecyclerView();
 
-        buttonStart = findViewById(R.id.startBtn);
-        buttonRemove = findViewById(R.id.removeBtn);
-        buttonCreate = findViewById(R.id.createButton);
+        viewHighscore = findViewById(R.id.viewHiBtn);
 
-        buttonCreate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(PlayActivity.this, CreateActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        buttonStart.setOnClickListener(new View.OnClickListener() {
+        viewHighscore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (pos != null){
-                    int position = pos;
-                    startCourse(position);
+                    Intent intent = new Intent(HighScoreActivity.this, CourseHighScore.class);
+                    String extra = mRecyclerList.get(pos).getItem();
+                    intent.putExtra("COURSE_NAME", extra);
+                    startActivity(intent);
                 } else {
-                    toastMessage("Choose a course before starting");
+                    toastMessage("Choose a course first to view HighScore");
                 }
             }
         });
-
-        buttonRemove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (pos != null){
-                    int position = pos;
-                    removeCourse(position);
-                } else {
-                    toastMessage("Choose a course before removing");
-                }
-            }
-        });
-    }
-
-    public void startCourse(int position){
-        if (pos != null){
-            Intent intent = new Intent(PlayActivity.this, PlayCourseActivity.class);
-            String extra = mRecyclerList.get(position).getItem();
-            intent.putExtra("COURSE_NAME", extra);
-            startActivity(intent);
-        }
-    }
-
-    public void removeCourse(int position){
-        if (pos != null){
-            String name = mRecyclerList.get(position).getItem();
-            mDatabaseHelper.deleteData(name);
-            mDatabaseHelper.deleteHighscore(name);
-            toastMessage("Removed from database");
-            mRecyclerList.remove(position);
-            mAdapter.notifyItemRemoved(position);
-            pos = null;
-        } else {
-            toastMessage("Choose a course before removing");
-        }
     }
 
     public void changeItem(int position, int image){
@@ -102,7 +59,7 @@ public class PlayActivity extends AppCompatActivity {
         mAdapter.notifyItemChanged(position);
     }
 
-    public void createRecyclerList(){
+    private void createRecyclerList() {
         Log.d(TAG, "populateRecyclerView: Displaying courses in the RecyclerView");
 
         Cursor data = mDatabaseHelper.getData();
@@ -115,8 +72,8 @@ public class PlayActivity extends AppCompatActivity {
         data.close();
     }
 
-    public void buildRecyclerView(){
-        mRecyclerView = findViewById(R.id.recyclerView);
+    private void buildRecyclerView() {
+        mRecyclerView = findViewById(R.id.highScoreCourseRecycler);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mAdapter = new RecyclerAdapter(mRecyclerList);
