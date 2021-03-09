@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
-    Button playBtn, settingsBtn, createBtn;
+    Button playBtn, highScoreBtn, createBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         playBtn = findViewById(R.id.playBtn);
-        settingsBtn = findViewById(R.id.settingsBtn);
+        highScoreBtn = findViewById(R.id.highScoreBtn);
         createBtn = findViewById(R.id.createBtn);
 
         playBtn.setOnClickListener(new View.OnClickListener() {
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        settingsBtn.setOnClickListener(new View.OnClickListener() {
+        highScoreBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SettingsActivity.class);

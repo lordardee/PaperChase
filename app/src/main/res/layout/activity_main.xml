@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="Welcome to the show!"
+        android:text="Main Menu"
         android:textSize="20sp"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
@@ -37,10 +37,10 @@
         app:layout_constraintVertical_bias="0.227" />
 
     <Button
-        android:id="@+id/settingsBtn"
+        android:id="@+id/highScoreBtn"
         android:layout_width="150dp"
         android:layout_height="50dp"
-        android:text="SETTINGS"
+        android:text="HIGHSCORE"
         app:backgroundTint="@color/cardview_dark_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -55,7 +55,7 @@
         android:layout_height="50dp"
         android:text="CREATE"
         app:backgroundTint="@color/cardview_dark_background"
-        app:layout_constraintBottom_toTopOf="@+id/settingsBtn"
+        app:layout_constraintBottom_toTopOf="@+id/highScoreBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/playBtn" />

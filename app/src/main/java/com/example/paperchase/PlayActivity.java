@@ -88,7 +88,7 @@ public class PlayActivity extends AppCompatActivity {
     public void removeCourse(int position){ //Den tar inte bort från databasen av någon anledning.
         if (pos != null){
             String name = mRecyclerList.get(position).getItem();
-            mDatabaseHelper.deleteData(position, name);
+            mDatabaseHelper.deleteData(name);
             toastMessage("Removed from database");
             mRecyclerList.remove(position);
             mAdapter.notifyItemRemoved(position);
@@ -112,6 +112,8 @@ public class PlayActivity extends AppCompatActivity {
         while(data.moveToNext()){
             mRecyclerList.add(new RecyclerItem(0, data.getString(0)));
         }
+
+        data.close();
     }
 
     public void buildRecyclerView(){

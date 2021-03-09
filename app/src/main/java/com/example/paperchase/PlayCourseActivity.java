@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class PlayCourseActivity extends AppCompatActivity {
-    private Button scanBtn, checkBtn;
+    private Button scanBtn, checkBtn, resetBtn;
     Chronometer timer;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -36,7 +36,8 @@ public class PlayCourseActivity extends AppCompatActivity {
     private String courseName = "";
     private String tempCourseName;
     private ArrayList<String> qrResult = new ArrayList<>();
-    private ArrayList<String> tempQrResult = new ArrayList<>();
+    private final ArrayList<String> tempQrResult = new ArrayList<>();
+    private String finalTime = "";
 
     SessionManager sessionManager;
     SimpleDateFormat format;
@@ -57,6 +58,7 @@ public class PlayCourseActivity extends AppCompatActivity {
         timer = findViewById(R.id.timer);
         scanBtn = findViewById(R.id.scanBtn);
         checkBtn = findViewById(R.id.checkBtn);
+        resetBtn = findViewById(R.id.resetBtn);
 
         sessionManager = new SessionManager(getApplicationContext());
         format = new SimpleDateFormat("hh:mm:ss aa");
@@ -85,6 +87,23 @@ public class PlayCourseActivity extends AppCompatActivity {
         createRecyclerList();
         buildRecyclerView();
 
+        resetBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (qrResult != null){
+                    qrResult.clear();
+                }
+                for (int i = 0; i < mRecyclerList.size(); i++){
+                    mRecyclerList.get(i).changeText("");
+                    mAdapter.notifyItemChanged(i);
+                }
+                timer.setBase(SystemClock.elapsedRealtime());
+                timer.stop();
+                currentTime = format.format(new Date());
+                sessionManager.setFlag(false);
+            }
+        });
+
         scanBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,8 +131,22 @@ public class PlayCourseActivity extends AppCompatActivity {
                                 sessionManager.setFlag(true);
                                 timer.start();
                             }
+
+                            if(qrList.size() == qrResult.size() && qrList.get(i).equals(qrResult.get(i))){
+                                String sessionCurrentTime = sessionManager.getCurrentTime();
+                                try {
+                                    Date date1 = format.parse(sessionCurrentTime);
+                                    Date date2 = format.parse(currentTime);
+                                    int elapsed = (int)(date2.getTime() - date1.getTime());
+                                    sessionManager.setFlag(false);
+                                    timer.stop();
+                                    finalTime = String.valueOf(elapsed);
+                                } catch (ParseException e){
+                                    e.printStackTrace();
+                                }
+                            }
                         }
-                    } catch(Exception e) { }
+                    } catch(Exception e) { e.printStackTrace();}
                 }
             }
         });

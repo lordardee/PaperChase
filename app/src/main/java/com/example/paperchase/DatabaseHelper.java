@@ -51,11 +51,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         long result = db.insert(TABLE_NAME, null, contentValues);
 
-        if (result == -1) {
-            return false;
-        } else {
-            return true;
-        }
+        return result != -1;
     }
 
     public Cursor getData(){
@@ -79,10 +75,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return data;
     }
 
-    public void deleteData(int id, String name){
+    public void deleteData(String name){
         SQLiteDatabase db = this.getWritableDatabase();
         //id = 4; //Debug funkar inte att ta bort om jag inte har denna hård kodning.
+        Cursor data = getItemId(name);
+        long id = 0;
+        while(data.moveToNext()){
+            id = data.getLong(data.getColumnIndex(DatabaseHelper.COURSE_ID));
+        }
         String query = "DELETE FROM " + TABLE_NAME + " WHERE ID = '" + id + "'";
         db.execSQL(query);
+        data.close();
     }
 }

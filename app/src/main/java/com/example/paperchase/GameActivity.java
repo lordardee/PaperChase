@@ -68,7 +68,7 @@ public class GameActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String data = /*resultData.getText().toString()*/"1";
+                String data = resultData.getText().toString();
                 qrTempList.add(data);
                 Intent intent = new Intent(GameActivity.this, PlayCourseActivity.class);
                 intent.putExtra("QR_RESULT", qrTempList);
